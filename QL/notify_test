@@ -1,0 +1,60 @@
+/**
+ * 青龙推送测试脚本
+ * 利用青龙环境变量中的 Bark 和 Telegram 推送参数进行测试
+ */
+
+// 推送内容
+const title = "推送测试";
+const content = "这是来自青龙的推送测试脚本！";
+
+// 主函数
+(async () => {
+    try {
+        console.log("开始推送到 Bark...");
+        await sendToBark(title, content);
+        console.log("Bark 推送完成！");
+
+        console.log("开始推送到 Telegram...");
+        await sendToTelegram(content);
+        console.log("Telegram 推送完成！");
+    } catch (error) {
+        console.error("推送失败：", error.message);
+    }
+})();
+
+// Bark 推送函数
+async function sendToBark(title, content) {
+    const barkKey = process.env.BARK_PUSH; // 从青龙环境变量获取 Bark 推送地址
+    if (!barkKey) {
+        console.log("未配置 Bark 推送，跳过...");
+        return;
+    }
+    const url = `${barkKey}/${encodeURIComponent(title)}/${encodeURIComponent(content)}`;
+    const response = await fetch(url, { method: "GET" });
+    if (!response.ok) {
+        throw new Error(`Bark 推送失败：${response.statusText}`);
+    }
+}
+
+// Telegram 推送函数
+async function sendToTelegram(content) {
+    const tgToken = process.env.TG_BOT_TOKEN; // 从青龙环境变量获取 Telegram Bot Token
+    const tgChatId = process.env.TG_USER_ID; // 从青龙环境变量获取 Telegram Chat ID
+    if (!tgToken || !tgChatId) {
+        console.log("未配置 Telegram 推送，跳过...");
+        return;
+    }
+    const url = `https://api.telegram.org/bot${tgToken}/sendMessage`;
+    const body = JSON.stringify({
+        chat_id: tgChatId,
+        text: content,
+    });
+    const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: body,
+    });
+    if (!response.ok) {
+        throw new Error(`Telegram 推送失败：${response.statusText}`);
+    }
+}
