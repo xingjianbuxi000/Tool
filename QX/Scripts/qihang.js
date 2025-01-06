@@ -1,5 +1,7 @@
-let body = $response.body; // 获取原始响应体
-let obj = JSON.parse(body); // 解析 JSON
+// 获取原始响应体
+let body = $response.body; 
+// 解析 JSON 字符串为对象
+let obj = JSON.parse(body);
 
 // 修改到期时间
 if (obj && obj.data) {
@@ -7,5 +9,5 @@ if (obj && obj.data) {
   obj.data.levelName = "星耀直通卡【永久】"; // 可选：修改会员名称
 }
 
-// 重新转换为 JSON 字符串并返回
+// 转换回字符串并返回
 $done({ body: JSON.stringify(obj) });
