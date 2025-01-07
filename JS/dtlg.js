@@ -12,7 +12,7 @@
 重写：打开小程序，查询积分。
 
 [rewrite_local]
-^https:\/\/carbon\.zhrct\.com\/prod-api\/wxapi\/score\/myScore url script-response-body Scripts/dtlg.js
+^https:\/\/carbon\.zhrct\.com\/prod-api\/wxapi\/score\/myScore url script-response-body https://raw.githubusercontent.com/xingjianbuxi000/Tool/main/JS/dtlg.js
 
 [MITM]
 hostname = carbon.zhrct.com
