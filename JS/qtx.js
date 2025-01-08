@@ -1,6 +1,6 @@
 /*
 [Script]
-http-request ^https:\/\/carbon\.lcago\.cn\/interact\/data script-path=https://raw.githubusercontent.com/xingjianbuxi000/Tool/main/JS/qtx.js, requires-body=true, timeout=60, tag=青碳行获取token
+http-request ^https:\/\/carbon\.lcago\.cn\/interact\/data script-path=test.js, requires-body=true, timeout=60, tag=青碳行获取token
 
 [MITM]
 hostname = ucarbon.lcago.cn
@@ -39,19 +39,27 @@ async function getCookie() {
     try {
         if ($request && $request.method === 'OPTIONS') return;
 
-        // 从请求体提取数据
-        const body = $.toObj($request.body);
+        // 提取请求头和请求体中的数据
         const headers = ObjectKeys2LowerCase($request.headers);
+        const body = $.toObj($request.body);
 
-        // 校验提取的必要参数
-        if (!(headers['cookie'] && body?.deviceCoding)) {
+        // 检查必要参数
+        if (!(headers['cookie'] && body?.deviceCoding && body?.token)) {
             throw new Error("❌获取token失败！参数缺失");
         }
 
-        // 上传到青龙环境，cookie 和用户标识(deviceCoding)
-        await refreshQingLong("qtx_data", headers['cookie'], body.deviceCoding);
+        // 构造上传数据
+        const token = body.token;
+        const userId = body.deviceCoding;
+        const cookie = headers['cookie'];
+
+        // 调用上传函数，将cookie和token上传到青龙
+        await refreshQingLong("qtx_data", cookie, userId, token);
+
+        // 成功提示
+        $.msg($.name, `🎉获取token成功！`, `用户ID: ${userId}, token: ${token}`);
     } catch (e) {
-        // 捕获错误并上传空值到青龙（用于清理）
+        // 处理异常并上传空值清理数据
         $.msg($.name, `❌发生错误：`, e.message || e);
         await refreshQingLong("qtx_data");
     }
