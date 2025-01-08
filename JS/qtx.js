@@ -1,6 +1,6 @@
 /*
 [Script]
-http-request ^https:\/\/carbon\.lcago\.cn\/interact\/data script-path=test.js, requires-body=true, timeout=60, tag=青碳行获取token
+http-request ^https:\/\/carbon\.lcago\.cn\/interact\/data script-path=https://raw.githubusercontent.com/xingjianbuxi000/Tool/main/JS/qtx.js, requires-body=true, timeout=60, tag=青碳行获取token
 
 [MITM]
 hostname = ucarbon.lcago.cn
