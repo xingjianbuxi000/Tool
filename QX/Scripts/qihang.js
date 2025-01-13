@@ -7,6 +7,7 @@ let obj = JSON.parse(body);
 if (obj && obj.data) {
   obj.data.deadlineEndTime = "2099-12-31 23:59:59"; // 自定义延长时间
   obj.data.levelName = "星耀直通卡【永久】"; // 可选：修改会员名称
+  obj.data.isTryoutMember = "1";
 }
 
 // 转换回字符串并返回
